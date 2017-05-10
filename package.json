@@ -1,7 +1,7 @@
 {
-    "name": "null",
-    "version": "0.0.1",
-    "description": "null",
+    "name": "io-helper",
+    "version": "1.0.1",
+    "description": "对文件常规操作辅助工具库 io helper",
     "main": "build/index.js",
     "scripts": {
         "start": "node run",
@@ -13,22 +13,27 @@
     },
     "repository": {
         "type": "git",
-        "url": "git@github.com:githbq/hbq-module-boilerplate.git"
+        "url": "https://github.com/githbq/hbq-iohelper.git"
     },
-    "keywords": [
-        "typescript"
-    ],
+    "keywords": ["typescript", "io-helper"],
     "author": "hubiqing",
     "license": "MIT",
     "bugs": {
-        "url": "git@github.com:githbq/hbq-module-boilerplate.git"
+        "url": "https://github.com/githbq/hbq-iohelper.git"
     },
-    "homepage": "git@github.com:githbq/hbq-module-boilerplate.git#readme",
+    "homepage": "https://github.com/githbq/hbq-iohelper.git#readme",
     "dependencies": {
+        "bluebird": "^3.5.0",
+        "debug": "^2.6.6",
+        "file-system": "^2.2.2",
+        "fs-extra-promise": "^1.0.1",
         "lodash": "^4.17.4",
+        "readline-promise": "^0.0.1",
         "tslib": "^1.6.1"
     },
     "devDependencies": {
+        "@types/bluebird": "^3.5.3",
+        "@types/fs-extra-promise": "^1.0.1",
         "@types/lodash": "^4.14.64",
         "@types/mocha": "^2.2.41",
         "@types/node": "^6.0.48",

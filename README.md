@@ -1,15 +1,5 @@
-#  模块名称 
-## 描述 
-1. 简介1 
-2. 简介2 
-
-![my love](./logo.png) 
-## 启动 
-- npm start  
-
-## 安装 
-- yarn 
-
-## test 测试    
-- npm run test     
-
+# io操作辅助功能
+## 对文件常规操作辅助工具库
+1. 采用promise化接口
+2. 对文件的增删改操作,递归文件路径操作 等等
+![my love](./logo.png)

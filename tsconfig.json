@@ -12,17 +12,15 @@
         "noEmitHelpers": true,
         "importHelpers": true,
         "strictNullChecks": false,
-        "lib": [
-            "es6"
-        ],
-        "typeRoots": [
-            "node_modules/@types"
-        ],
+        "lib": ["es6"],
+        "typeRoots": ["node_modules/@types"],
         "types": [
             "node",
             "should",
             "mocha",
-            "lodash"
+            "lodash",
+            "fs-extra-promise",
+            "bluebird" 
         ],
         "outDir": "./build",
         "rootDir": "./src"
