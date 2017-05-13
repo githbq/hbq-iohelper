@@ -7,9 +7,11 @@ import walkFolderTree from './walkFolderTree'
 import * as  readlinePromise from 'readline-promise'
 import * as  _ from 'lodash'
 import * as fileSystem from 'file-system'
+import * as globby from 'globby'
 export default {
     fs,
     pathTool,
+    globby(patterns: string | Array<string>, options: any = {}) { return globby(patterns, { dot: true, cwd: 'C:', silent: true, strict: false, ...options }) },
     /**
      * 
      * @param {目录地址} dirname 

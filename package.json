@@ -1,6 +1,6 @@
 {
     "name": "io-helper",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "对文件常规操作辅助工具库 io helper",
     "main": "build/index.js",
     "scripts": {
@@ -27,6 +27,7 @@
         "debug": "^2.6.6",
         "file-system": "^2.2.2",
         "fs-extra-promise": "^1.0.1",
+        "globby": "^6.1.0",
         "lodash": "^4.17.4",
         "readline-promise": "^0.0.1",
         "tslib": "^1.6.1"
