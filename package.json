@@ -1,6 +1,6 @@
 {
     "name": "io-helper",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "对文件常规操作辅助工具库 io helper",
     "main": "build/index.js",
     "scripts": {
