@@ -117,6 +117,10 @@ export default {
     makeDir(directory) {
         return fs.ensureDirAsync(directory)
     },
+    //创建路径递归 同步
+    makeDirSync(directory) {
+        return fs.ensureDirSync(directory)
+    },
     //文件存在判断
     exists(path) {
         return fs.existsAsync(path)
