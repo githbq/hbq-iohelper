@@ -1,6 +1,6 @@
 {
     "name": "io-helper",
-    "version": "1.0.8",
+    "version": "2.0.1",
     "description": "对文件常规操作辅助工具库 io helper",
     "main": "build/index.js",
     "scripts": {
@@ -9,7 +9,8 @@
         "clear": "rimraf build",
         "tsc": "npm run clear && tsc",
         "tsc:w": "npm run clear && tsc -w",
-        "p": "npm run tsc && npm publish"
+        "p": "npm run tsc && npm publish",
+        "lint": "tslint \"src/**/*.ts\""
     },
     "repository": {
         "type": "git",
@@ -23,7 +24,6 @@
     },
     "homepage": "https://github.com/githbq/hbq-iohelper.git#readme",
     "dependencies": {
-        "bluebird": "^3.5.0",
         "debug": "^2.6.6",
         "file-system": "^2.2.2",
         "fs-extra-promise": "^1.0.1",
@@ -33,7 +33,6 @@
         "tslib": "^1.6.1"
     },
     "devDependencies": {
-        "@types/bluebird": "^3.5.3",
         "@types/fs-extra-promise": "^1.0.1",
         "@types/lodash": "^4.14.64",
         "@types/mocha": "^2.2.41",

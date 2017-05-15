@@ -15,12 +15,11 @@
         "lib": ["es6"],
         "typeRoots": ["node_modules/@types"],
         "types": [
-            "node",
-            "should",
-            "mocha",
-            "lodash",
             "fs-extra-promise",
-            "bluebird" 
+            "lodash",
+            "mocha",
+            "node",
+            "should"
         ],
         "outDir": "./build",
         "rootDir": "./src"

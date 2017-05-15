@@ -3,7 +3,6 @@
  */
 import * as pathTool from 'path'
 import * as fs from 'fs-extra-promise'
-import walkFolderTree from './walkFolderTree'
 import * as  readlinePromise from 'readline-promise'
 import * as  _ from 'lodash'
 import * as fileSystem from 'file-system'
@@ -24,25 +23,6 @@ export default {
         fs.renameSync(oldPath, newPath)
     },
     /**
-     * options:{ filterFiles: /^package\.json/, filterFolders: /^(?!node_modules)/ }
-     */
-    walkTree(path, options = {}, onFind) {
-        const paths = [];
-        return walkFolderTree(path, options, function (params, cb) {
-            if (onFind) {
-                const result = onFind(params)
-                if (result !== false) {
-                    paths.push(params)
-                }
-            } else {
-                paths.push(params)
-            }
-            cb();
-        }).then(() => {
-            return paths
-        })
-    },
-    /**
      * 
      * @param {目录地址} dirname 
      * @param {文件名:xxx.txt} oldFilename 
@@ -58,25 +38,25 @@ export default {
      * @param {*文件路径 } filePath 
      */
     readLine(filePath, cb) {
-        const lines = [];
+        const lines = []
         return readlinePromise.createInterface({
             terminal: false,
             input: fs.createReadStream(filePath)
         })
             .each(function (line) {
                 if (cb) {
-                    const cbResult = cb(line);
+                    const cbResult = cb(line)
                     if (false !== cbResult) {
-                        lines.push(line);
+                        lines.push(line)
                     } else {
-                        lines.push(cbResult || '');
+                        lines.push(cbResult || '')
                     }
                 } else {
-                    lines.push(line);
+                    lines.push(line)
                 }
             }).then((count) => {
-                return { count: count.lines, lines };
-            });
+                return { count: count.lines, lines }
+            })
     },
     /**
      * 递归查找文件目录
@@ -112,17 +92,17 @@ export default {
         //本次取得的数组
         arr.forEach(n => {
             const hasParent = _.some(arr, m => {
-                let result = n[key] != m[key] && n[key].indexOf(m[key]) == 0
+                let result = n[key] !== m[key] && n[key].indexOf(m[key]) === 0
                 return result
             })
-            if (!hasParent && ((!parentKey) || (n[key].indexOf(parentKey) == 0))) {
+            if (!hasParent && ((!parentKey) || (n[key].indexOf(parentKey) === 0))) {
                 refArr.push(n)
             }
         })
         //放入下一次递归中的数组
         const nextArr = []
         arr.forEach((n) => {
-            if (_.indexOf(refArr, n) == -1) {
+            if (_.indexOf(refArr, n) === -1) {
                 nextArr.push(n)
             }
         })
