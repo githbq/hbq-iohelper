@@ -10,7 +10,22 @@ import * as globby from 'globby'
 export default {
     fs,
     pathTool,
-    globby(patterns: string | Array<string>, options: any = {}) { return globby(patterns, { dot: true, silent: true, strict: false, ...options }) },
+    /**
+     * 处理路径 
+     * @param dirs 
+     */
+    processDir(...dirs): string {
+        if (dirs.length > 0) {
+            if (dirs.length === 1) {
+                return pathTool.join.apply(null, [].concat(dirs[0]))
+            } else {
+                pathTool.join.apply(null, dirs)
+            }
+        }
+    },
+    globby(patterns: string | Array<string>, options: any = {}) {
+        return globby(patterns, { dot: true, silent: true, strict: false, ...options })
+    },
     /**
      * 
      * @param {目录地址} dirname 
@@ -18,6 +33,7 @@ export default {
      * @param {新文件名} newFilename 
      */
     renameSync(dirname, oldFilename, newFilename) {
+        dirname = this.processDir(dirname)
         let oldPath = pathTool.join(dirname, oldFilename)
         let newPath = pathTool.join(dirname, newFilename)
         fs.renameSync(oldPath, newPath)
@@ -28,7 +44,8 @@ export default {
      * @param {文件名:xxx.txt} oldFilename 
      * @param {新文件名} newFilename 
      */
-    renameAsync(dirname, oldFilename, newFilename) {
+    rename(dirname, oldFilename, newFilename) {
+        dirname = this.processDir(dirname)
         let oldPath = pathTool.join(dirname, oldFilename)
         let newPath = pathTool.join(dirname, newFilename)
         return fs.renameAsync(oldPath, newPath)
@@ -38,6 +55,7 @@ export default {
      * @param {*文件路径 } filePath 
      */
     readLine(filePath, cb) {
+        filePath = this.processDir(filePath)
         const lines = []
         return readlinePromise.createInterface({
             terminal: false,
@@ -63,11 +81,10 @@ export default {
      * @param {一个字符串,或者一个字符串数组,会自动join} paths 
      * @param {筛选字符串} filter 
      */
-    findRecurseSync(paths, filter) {
+    findRecurseSync(path, filter) {
+        path = this.processDir(path)
         let files = []
         filter = filter || '**/*.*'
-        paths = [].concat(paths) //支持单字符串或者 字符串数组
-        const path = pathTool.join.apply(null, paths)
         fileSystem.recurseSync(path, filter, (filePath, relative, fileName) => {
             let pathName = this.getDirName(filePath)
             files.push({ pathName, filePath, relative, fileName, isFolder: !fileName ? true : undefined, isFile: fileName ? true : undefined })
@@ -79,7 +96,8 @@ export default {
      * @param {*} paths 
      * @param {*} filter 
      */
-    findRecurseTreeSync(paths, filter) {
+    findRecurseTreeSync(path, filter) {
+        path = this.processDir(path)
         const result = this.findRecurseSync.apply(this, arguments)
         return this.transformPathToTree(result)
     },
@@ -115,15 +133,16 @@ export default {
     },
     //创建路径递归
     makeDir(directory) {
-        return fs.ensureDirAsync(directory)
+        return fs.ensureDirAsync(this.processDir(directory))
     },
     //创建路径递归 同步
     makeDirSync(directory) {
-        return fs.ensureDirSync(directory)
+        return fs.ensureDirSync(this.processDir(directory))
     },
     //文件存在判断
     exists(path) {
-        return fs.existsAsync(path)
+
+        return fs.existsAsync(this.processDir(path))
     },
     //路径 转换
     // directoryTransform: (path, toPath) => {
@@ -131,10 +150,12 @@ export default {
     // },
     //获取目录地址
     getDirName(path) {
+        path = this.processDir(path)
         return pathTool.dirname(path)
     },
     //获取文件名 如:a.jpg
     getBaseName(path, ext) {
+        path = this.processDir(path)
         return pathTool.basename(path, ext)
     },
     //获取文件的拓展名如  :  .jpg
@@ -143,6 +164,7 @@ export default {
     },
     //替换文件类型
     replaceFileNameExt(filePath, newExt) {
+        filePath = this.processDir(filePath)
         let oldExt = this.getExtName(filePath)
         let dirName = this.getDirName(filePath)
         let fileName = this.getBaseName(filePath, oldExt)
@@ -150,17 +172,20 @@ export default {
     },
     //异步复制文件
     copy(path, toPath, options) {
+        path = this.processDir(path)
+        toPath = this.processDir(toPath)
         return fs.copyAsync(path, toPath, options || {})
     },
     //读取文件内容
     readFile(path) {
-        return fs.readFileAsync(path, 'utf8')
+        return fs.readFileAsync(this.processDir(path), 'utf8')
     },
     readFileStream(path) {
-        return fs.readFileAsync(path)
+        return fs.readFileAsync(this.processDir(path))
     },
     //保存文件
     saveFile(path, content) {
+        path = this.processDir(path)
         if (_.isObject) {
             return fs.outputJSONAsync(path, content)
         }
@@ -169,10 +194,12 @@ export default {
     },
     //删除文件或文件夹
     delete(path) {
+        path = this.processDir(path)
         return fs.removeAsync(path)
     },
     //创建或覆盖或追加文件
     async writeFile(path, content, isAppend) {
+        path = this.processDir(path)
         if (isAppend) {
             let oldContent = await this.readFile(path)
             content = `${oldContent}\n${content}`
@@ -182,15 +209,18 @@ export default {
 
     //将反斜杠 替换为正斜杠
     replaceSep: (path) => {
+        path = this.processDir(path)
         return path.replace(/\\/g, '/')
     },
     //获取路径的文件信息 recursive:bool 是否递归查找
     async getDirectoryInfo(path, recursive) {
+        path = this.processDir(path)
         let fileList = []
         await this.walk(path, fileList, recursive)
         return fileList
     },
     async walk(path, fileList = [], recursive) {
+        path = this.processDir(path)
         let dirList = await fs.readdirAsync(path)
         for (let item of dirList) {
             const pathInfo = await fs.statAsync(path + '/' + item)
