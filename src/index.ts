@@ -17,9 +17,9 @@ export default {
     processDir(...dirs): string {
         if (dirs.length > 0) {
             if (dirs.length === 1) {
-                return this.join.apply(null, [].concat(dirs[0]))
+                return pathTool.join.apply(null, [].concat(dirs[0]))
             } else {
-                return this.join.apply(null, dirs)
+                return pathTool.join.apply(null, dirs)
             }
         }
     },
@@ -236,7 +236,6 @@ export default {
 
     //将反斜杠 替换为正斜杠
     replaceSep(path) {
-        path = this.processDir(path)
         return path.replace(/\\/g, '/')
     },
     //获取路径的文件信息 recursive:bool 是否递归查找
