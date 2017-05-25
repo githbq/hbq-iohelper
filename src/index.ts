@@ -186,7 +186,7 @@ export default {
     //保存文件
     saveFile(path, content) {
         path = this.processDir(path)
-        if (_.isObject) {
+        if (_.isObject(content)) {
             return fs.outputJSONAsync(path, content)
         }
         return fs.outputFileAsync(path, content || '')
@@ -198,7 +198,7 @@ export default {
         return fs.removeAsync(path)
     },
     //创建或覆盖或追加文件
-    async writeFile(path, content, isAppend) {
+    async writeFile(path, content, isAppend = false) {
         path = this.processDir(path)
         if (isAppend) {
             let oldContent = await this.readFile(path)
