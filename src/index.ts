@@ -7,7 +7,7 @@ import * as  readlinePromise from 'readline-promise'
 import * as  _ from 'lodash'
 import * as fileSystem from 'file-system'
 import * as globby from 'globby'
-export default {
+const ioHelper = {
     fs,
     pathTool,
     /**
@@ -28,14 +28,14 @@ export default {
      * @param path 
      */
     join(...path) {
-        return this.replaceSep(pathTool.join.apply(null, path))
+        return ioHelper.replaceSep(pathTool.join.apply(null, path))
     },
     /**
      * 获取路径拼接后的绝对路径
      * @param path 
      */
     resolve(...path) {
-        return this.replaceSep(pathTool.join.apply(null, path))
+        return ioHelper.replaceSep(pathTool.join.apply(null, path))
     },
     /**
      * 获取两个路径之前的相对路径
@@ -43,7 +43,7 @@ export default {
      * @param toPath 
      */
     relative(fromPath, toPath) {
-        return this.replaceSep(pathTool.join(this.processDir(fromPath), this.processDir(toPath)))
+        return ioHelper.replaceSep(pathTool.join(ioHelper.processDir(fromPath), ioHelper.processDir(toPath)))
     },
     /**
      * 路径特征查找
@@ -60,7 +60,7 @@ export default {
      * @param {新文件名} newFilename 
      */
     renameSync(dirname, oldFilename, newFilename) {
-        dirname = this.processDir(dirname)
+        dirname = ioHelper.processDir(dirname)
         let oldPath = pathTool.join(dirname, oldFilename)
         let newPath = pathTool.join(dirname, newFilename)
         fs.renameSync(oldPath, newPath)
@@ -72,7 +72,7 @@ export default {
      * @param {新文件名} newFilename 
      */
     rename(dirname, oldFilename, newFilename) {
-        dirname = this.processDir(dirname)
+        dirname = ioHelper.processDir(dirname)
         let oldPath = pathTool.join(dirname, oldFilename)
         let newPath = pathTool.join(dirname, newFilename)
         return fs.renameAsync(oldPath, newPath)
@@ -82,7 +82,7 @@ export default {
      * @param {*文件路径 } filePath 
      */
     readLine(filePath, cb) {
-        filePath = this.processDir(filePath)
+        filePath = ioHelper.processDir(filePath)
         const lines = []
         return readlinePromise.createInterface({
             terminal: false,
@@ -109,11 +109,11 @@ export default {
      * @param {筛选字符串} filter 
      */
     findRecurseSync(path, filter) {
-        path = this.processDir(path)
+        path = ioHelper.processDir(path)
         let files = []
         filter = filter || '**/*.*'
         fileSystem.recurseSync(path, filter, (filePath, relative, fileName) => {
-            let pathName = this.getDirName(filePath)
+            let pathName = ioHelper.getDirName(filePath)
             files.push({ pathName, filePath, relative, fileName, isFolder: !fileName ? true : undefined, isFile: fileName ? true : undefined })
         })
         return files
@@ -124,15 +124,15 @@ export default {
      * @param {*} filter 
      */
     findRecurseTreeSync(path, filter) {
-        path = this.processDir(path)
-        const result = this.findRecurseSync.apply(this, arguments)
-        return this.transformPathToTree(result)
+        path = ioHelper.processDir(path)
+        const result = ioHelper.findRecurseSync.apply(ioHelper, arguments)
+        return ioHelper.transformPathToTree(result)
     },
     /**
     * 将路径 对象数组 转换为 树形结构
     * [{fileName,filePath,isFile,pathName,relative,children:[]}]
     */
-    transformPathToTree(arr, key = 'filePath', parentKey) {
+    transformPathToTree(arr, key = 'filePath', parentKey?) {
         const refArr = []
         //本次取得的数组
         arr.forEach(n => {
@@ -153,36 +153,32 @@ export default {
         })
         refArr.forEach(n => {
             if (n.isFolder) {
-                n.children = this.transformPathToTree(nextArr, key, n[key])
+                n.children = ioHelper.transformPathToTree(nextArr, key, n[key])
             }
         })
         return _.sortBy(refArr, (n) => { return n.isFile ? 1 : 0 })
     },
     //创建路径递归
     makeDir(directory) {
-        return fs.ensureDirAsync(this.processDir(directory))
+        return fs.ensureDirAsync(ioHelper.processDir(directory))
     },
     //创建路径递归 同步
     makeDirSync(directory) {
-        return fs.ensureDirSync(this.processDir(directory))
+        return fs.ensureDirSync(ioHelper.processDir(directory))
     },
     //文件存在判断
     exists(path) {
 
-        return fs.existsAsync(this.processDir(path))
+        return fs.existsAsync(ioHelper.processDir(path))
     },
-    //路径 转换
-    // directoryTransform: (path, toPath) => {
-
-    // },
     //获取目录地址
     getDirName(path) {
-        path = this.processDir(path)
+        path = ioHelper.processDir(path)
         return pathTool.dirname(path)
     },
     //获取文件名 如:a.jpg
     getBaseName(path, ext) {
-        path = this.processDir(path)
+        path = ioHelper.processDir(path)
         return pathTool.basename(path, ext)
     },
     //获取文件的拓展名如  :  .jpg
@@ -191,28 +187,28 @@ export default {
     },
     //替换文件类型
     replaceFileNameExt(filePath, newExt) {
-        filePath = this.processDir(filePath)
-        let oldExt = this.getExtName(filePath)
-        let dirName = this.getDirName(filePath)
-        let fileName = this.getBaseName(filePath, oldExt)
-        return this.pathTool.join(dirName, fileName + newExt)
+        filePath = ioHelper.processDir(filePath)
+        let oldExt = ioHelper.getExtName(filePath)
+        let dirName = ioHelper.getDirName(filePath)
+        let fileName = ioHelper.getBaseName(filePath, oldExt)
+        return ioHelper.pathTool.join(dirName, fileName + newExt)
     },
     //异步复制文件
     copy(path, toPath, options) {
-        path = this.processDir(path)
-        toPath = this.processDir(toPath)
+        path = ioHelper.processDir(path)
+        toPath = ioHelper.processDir(toPath)
         return fs.copyAsync(path, toPath, options || {})
     },
     //读取文件内容
     readFile(path) {
-        return fs.readFileAsync(this.processDir(path), 'utf8')
+        return fs.readFileAsync(ioHelper.processDir(path), 'utf8')
     },
     readFileStream(path) {
-        return fs.readFileAsync(this.processDir(path))
+        return fs.readFileAsync(ioHelper.processDir(path))
     },
     //保存文件
     saveFile(path, content) {
-        path = this.processDir(path)
+        path = ioHelper.processDir(path)
         if (_.isObject(content)) {
             return fs.outputJSONAsync(path, content)
         }
@@ -221,32 +217,31 @@ export default {
     },
     //删除文件或文件夹
     delete(path) {
-        path = this.processDir(path)
+        path = ioHelper.processDir(path)
         return fs.removeAsync(path)
     },
     //创建或覆盖或追加文件
     async writeFile(path, content, isAppend = false) {
-        path = this.processDir(path)
+        path = ioHelper.processDir(path)
         if (isAppend) {
-            let oldContent = await this.readFile(path)
+            let oldContent = await ioHelper.readFile(path)
             content = `${oldContent}\n${content}`
         }
-        return this.saveFile(path, content)
+        return ioHelper.saveFile(path, content)
     },
-
     //将反斜杠 替换为正斜杠
     replaceSep(path) {
         return path.replace(/\\/g, '/')
     },
     //获取路径的文件信息 recursive:bool 是否递归查找
     async getDirectoryInfo(path, recursive) {
-        path = this.processDir(path)
+        path = ioHelper.processDir(path)
         let fileList = []
-        await this.walk(path, fileList, recursive)
+        await ioHelper.walk(path, fileList, recursive)
         return fileList
     },
-    async walk(path, fileList = [], recursive) {
-        path = this.processDir(path)
+    async walk(path, fileList = [], recursive?) {
+        path = ioHelper.processDir(path)
         let dirList = await fs.readdirAsync(path)
         for (let item of dirList) {
             const pathInfo = await fs.statAsync(path + '/' + item)
@@ -255,8 +250,9 @@ export default {
             }
             if (pathInfo.isDirectory()) {
                 fileList.push({ folder: path + '/' + item })
-                recursive && await this.walk(path + '/' + item, fileList)
+                recursive && await ioHelper.walk(path + '/' + item, fileList)
             }
         }
     }
-} 
+}
+export default ioHelper
