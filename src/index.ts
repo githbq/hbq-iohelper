@@ -208,7 +208,7 @@ export default {
     },
 
     //将反斜杠 替换为正斜杠
-    replaceSep: (path) => {
+    replaceSep(path) {
         path = this.processDir(path)
         return path.replace(/\\/g, '/')
     },
