@@ -17,12 +17,39 @@ export default {
     processDir(...dirs): string {
         if (dirs.length > 0) {
             if (dirs.length === 1) {
-                return pathTool.join.apply(null, [].concat(dirs[0]))
+                return this.join.apply(null, [].concat(dirs[0]))
             } else {
-                pathTool.join.apply(null, dirs)
+                return this.join.apply(null, dirs)
             }
         }
     },
+    /**
+     * 路径拼接
+     * @param path 
+     */
+    join(...path) {
+        return this.replaceSep(pathTool.join.apply(null, path))
+    },
+    /**
+     * 获取路径拼接后的绝对路径
+     * @param path 
+     */
+    resolve(...path) {
+        return this.replaceSep(pathTool.join.apply(null, path))
+    },
+    /**
+     * 获取两个路径之前的相对路径
+     * @param fromPath 
+     * @param toPath 
+     */
+    relative(fromPath, toPath) {
+        return this.replaceSep(pathTool.join(this.processDir(fromPath), this.processDir(toPath)))
+    },
+    /**
+     * 路径特征查找
+     * @param patterns 
+     * @param options 
+     */
     globby(patterns: string | Array<string>, options: any = {}) {
         return globby(patterns, { dot: true, silent: true, strict: false, ...options })
     },
