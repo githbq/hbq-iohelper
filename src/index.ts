@@ -35,7 +35,7 @@ const ioHelper = {
      * @param path 
      */
     resolve(...path) {
-        return ioHelper.replaceSep(pathTool.join.apply(null, path))
+        return ioHelper.replaceSep(pathTool.resolve.apply(null, path))
     },
     /**
      * 获取两个路径之前的相对路径
