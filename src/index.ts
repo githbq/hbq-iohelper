@@ -7,7 +7,7 @@ import * as  readlinePromise from 'readline-promise'
 import * as  _ from 'lodash'
 import * as fileSystem from 'file-system'
 import * as globby from 'globby'
-const ioHelper = {
+export const ioHelper = {
     fs,
     pathTool,
     /**
@@ -76,6 +76,20 @@ const ioHelper = {
         let oldPath = pathTool.join(dirname, oldFilename)
         let newPath = pathTool.join(dirname, newFilename)
         return fs.renameAsync(oldPath, newPath)
+    },
+    /**
+     * 
+     * @param fromPath 源路径 xxxx/xxx/1.txt
+     * @param toPath 目的路径 自动创建路径   qqq/yyyy只移动不改名  或者 qqq/yyy/222.txt移动并且改名
+     * @param options {overwrite:true} 覆盖同名文件
+     */
+    move(fromPath, toPath, options?) {
+        fromPath = ioHelper.processDir(fromPath)
+        const fileName = pathTool.basename(fromPath)
+        if (pathTool.basename(toPath).indexOf('.') === -1) {
+            toPath = ioHelper.processDir(toPath, fileName)
+        }
+        return fs.moveAsync(fromPath, toPath, { overwrite: true, ...options })
     },
     /**
      * 换行读取文本文件

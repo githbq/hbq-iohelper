@@ -1,3 +1,5 @@
  require('ts-node/register')
 
- require('./src/index.ts')
+ var { ioHelper } = require('./src/index.ts')
+
+ ioHelper.move('./temp/111.txt', './temp/ttt/')
