@@ -20,11 +20,11 @@ import ioHelper from 'ioHelper'
 
 #### fs
 
-    `fs`对应`import * as fs from 'fs-extra-promise'`
+>    `fs` 对应 `import * as fs from 'fs-extra-promise'`
 
 #### pathTool
     nodejs内置path模块的别名
-`pathTool`对应`import * as pathTool from 'path'`
+> `pathTool` 对应 `import * as pathTool from 'path'`
 
 #### join
 
@@ -45,7 +45,7 @@ import ioHelper from 'ioHelper'
 - options `{ dot: true, silent: true, strict: false, ...options }`
 - patterns:参见`glob`模块对应`pattern`参数 
 
-#### renameSync(dirname, oldFilename, newFilename)
+#### renameSync
 
 `renameSync(dirname, oldFilename, newFilename)`
 - 同步重命名文件 /xx/yy/z.js
@@ -69,12 +69,13 @@ import ioHelper from 'ioHelper'
 - toPath: 目的路径 自动创建路径   qqq/yyyy只移动不改名  或者 qqq/yyy/222.txt移动并且改名
 - options: `{overwrite:true}` 覆盖同名文件
 
-#### readline
+#### readLine
 
     逐行读取文本
 `readLine(filePath, cb)`
 - filePath: 文件的路径
 - cb: 读取每一行时的回调`cb(line)` line:每一行的字符串
+- 返回 Promise<[string]>
 
 #### findRecurseSync
 
@@ -165,5 +166,6 @@ import ioHelper from 'ioHelper'
     将反斜杠 替换为正斜杠
 `replaceSep(path)`
 - path: 文件路径
+- 返回 Promise<string>
 
 
