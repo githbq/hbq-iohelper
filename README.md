@@ -30,20 +30,25 @@ import ioHelper from 'ioHelper'
 
     路径拼接
 `join(...path)` 
+- 返回 `string`
 
 #### resolve
     获取路径拼接后的绝对路径
 `resolve(...path)`
+- 返回 `string`
 
 #### relative
-    获取两个路径之前的相对路径
+    获取两个路径之间的相对路径
 `relative(fromPath, toPath)` 
+- 返回 `string`
 
 #### globby
     路径特征查找
 `globby(patterns: string | Array<string>, options: any = {})`
 - options `{ dot: true, silent: true, strict: false, ...options }`
 - patterns:参见`glob`模块对应`pattern`参数 
+- 选项参考 `globby` 库 
+- 返回 Promise<string> 文件数组
 
 #### renameSync
 
