@@ -13,7 +13,7 @@
 ## 用例
 
 ```javascript
-import ioHelper from 'ioHelper'
+import ioHelper from 'io-helper'
 ```
 
 ### 属性
